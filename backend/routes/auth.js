@@ -3,11 +3,12 @@ const router = express.Router(); //creating a object router to define routes
 const User = require('../models/User.js'); //importing user.js file
 const { body, validationResult } = require('express-validator'); //importing validation functions from express-validator
 const bcrypt = require('bcryptjs'); //importing bcrypt lib for password hashing
-const jwt=require('jsonwebtoken')
-
+const jwt=require('jsonwebtoken');
 const Jwt_Secret="Doneby@RohithRudrapati";
+const fetchUser=require('../middleware/fetchUser.js');
 
-//create a User using: POST "/api/auth/createuser". No login Required
+
+//ROUTE 1 : create a User using: POST "/api/auth/createuser". No login Required
 //here i am defining a POST route at /createuser that handles user creation
 router.post('/createuser', [
     body('name', 'Enter a valid name').isLength({ min: 3 }), //giving validations
@@ -57,6 +58,8 @@ router.post('/createuser', [
 })
 
 
+
+// ROUTE 2 : Authenticate a user using: POST "/api/auth/login". No login required
 // Defining a POST route for user login, with validation for email and password.
 router.post('/login', [
       body('email', 'Enter a valid email').isEmail(),
@@ -96,6 +99,22 @@ router.post('/login', [
         res.status(500).send("There is some Internal Server Issue"); // we will get to see this in response like in thunderclient response
     }
 
-})
+});
 
+ 
+
+// we will be using concept like middle ware , its nothing but a fucntion which will be called if we get any request . here it works if any request raises at login req
+//ROUTE 3 : Get loggedin User Details using: POST "/api/auth/getuser". Login required
+router.post('/getuser',fetchUser,async(req,res)=>{
+
+try {
+    userId= req.user.id; //Assigning the ID of the authenticated user to the variable userId. This is obtained from the req.user.id property, which is populated by the fetchUser middleware.
+    const user= await User.findById(userId).select("-password") //Fetches the user from the database by ID, excluding the password field from the result.
+    res.send(user) // sending the user data back to the client 
+
+} catch (error) {
+    console.error(error.message);
+        res.status(500).send("There is some Internal Server Issue"); // we will get to see this in response like in thunderclient response
+}
+});
 module.exports = router //exports the router so that we can use it in other parts of the application

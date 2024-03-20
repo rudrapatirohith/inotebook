@@ -18,7 +18,7 @@ router.post('/createuser', [
     //if there are errors , return Bad request and the errors
   //prints the req which we gave in body
     // console.log(req.body);    
-
+    let success=false;
     const errors = validationResult(req); //checking for validation errors
     if (!errors.isEmpty()) {  // If there are validation errors, returns a 400 status with the errors.  
         return res.status(400).json({ errors: errors.array() });
@@ -28,7 +28,7 @@ router.post('/createuser', [
     try {
         let user = await User.findOne({ email: req.body.email }); //Checks if a user with the given email already exists.
         if (user) {
-            return res.status(400).json({ error: "Sorry a user with this email already exists" }) //if exists gives this error
+            return res.status(400).json({ success,error: "Sorry a user with this email already exists" }) //if exists gives this error
         }
         const salt = await bcrypt.genSalt(10); //generates a salt for the password hashing
         securedPass = await bcrypt.hash(req.body.password, salt); //hashes the password with the salt
@@ -46,8 +46,8 @@ router.post('/createuser', [
         }
         const authenticationToken =jwt.sign(data, Jwt_Secret ); //Generates a JWT token for the user by using the sign. 
         // console.log(authenticationToken);
-
-        res.json({authenticationToken}) //Sends the newly created user as a JSON response.
+        success=true;
+        res.json({success,authenticationToken}) //Sends the newly created user as a JSON response.
     }
     //catch errors: Handles any errors that occur during the process.
     catch (error) {
@@ -66,7 +66,7 @@ router.post('/login', [
       body('password', 'password cannot be blank').exists(), // check whether the password is entered or not
 
 ], async (req, res) => {
-
+    let success=false;
     const errors = validationResult(req); //checking for validation errors
     if (!errors.isEmpty()) {  // If there are validation errors, returns a 400 status with the errors.  
         return res.status(400).json({ errors: errors.array() });
@@ -76,12 +76,12 @@ router.post('/login', [
     try{
         let user= await User.findOne({email}); //checks if user had similar email
         if(!user){ //if not return error
-            return res.status(400).json({error: "Please log in with the correct credentials"});
+            return res.status(400).json({success, error: "Please log in with the correct credentials"});
         }
         // if yes it will check for password match so we use comparing btw the provided password and stored password
         const passwordComparing = await bcrypt.compare(password,user.password);
         if(!passwordComparing){ // if password dont match raises error
-            return res.status(400).json({error: "Please log in with the correct credentials"});
+            return res.status(400).json({success,error: "Please log in with the correct credentials"});
         }
 
     // if matches we prepare data for jwt token generation
@@ -91,7 +91,8 @@ router.post('/login', [
             }
         }
         const authenticationToken= jwt.sign(data,Jwt_Secret); 
-        res.json({authenticationToken}) // Sends the JWT token back to the client we can see this in response in json format.
+        success=true;
+        res.json({success,authenticationToken}) // Sends the JWT token back to the client we can see this in response in json format.
 
     }
     catch (error) {  //if any error occurs during progress, it will send 500 status with an error message

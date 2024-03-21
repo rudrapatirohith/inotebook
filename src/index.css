@@ -15,3 +15,18 @@ code {
 i{
   cursor: pointer;
 }
+footer p{
+  margin: 0px;
+}
+footer{
+  text-align:center;
+  background-color: #dbd8e3;
+  height: 50px;
+  /* position: fixed; */
+  width: 100%;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+  }

@@ -18,15 +18,15 @@ i{
 footer p{
   margin: 0px;
 }
-footer{
+/* footer{
   text-align:center;
   background-color: #dbd8e3;
   height: 50px;
-  /* position: fixed; */
+  position: absolute;
   width: 100%;
-  bottom: 0;
+  bottom: 0px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   display: flex;
-  }
+  } */

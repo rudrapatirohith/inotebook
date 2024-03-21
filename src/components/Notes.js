@@ -72,7 +72,7 @@ function Notes(props) {
                     <label htmlFor="description" className="form-label">Description</label>
                     <textarea className="form-control" id="edescription" name="edescription" rows="1" value={note.edescription} onChange={onChange} minLength={3} required></textarea>
                   </div>
-                  <div className="mb-3">
+                  <div className="mb-3" >
                     <label htmlFor="tag" className="form-label">Tag</label>
                     <textarea className="form-control" id="etag" name="etag" rows="1" value={note.etag} onChange={onChange}></textarea>
                   </div>
@@ -89,7 +89,7 @@ function Notes(props) {
       </div>
       <div className='row my-3'>
         <h2>Your Notes</h2>
-        <div className='container mx-2'>
+        <div className='container mx-2 catd-margin'>
         {notes.length===0 && 'No notes to Display'}
         </div>
         {notes.map((note) => {

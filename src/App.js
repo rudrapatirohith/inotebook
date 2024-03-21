@@ -13,6 +13,7 @@ import {
 import NoteState from './context/notes/NoteState';
 import Alert from './components/Alert';
 import { useState } from 'react';
+import Footer from './components/Footer';
 
 
 function App() {
@@ -40,6 +41,8 @@ function App() {
               <Route path="/Signup" element={<Signup showAlert={showAlert} />} />
             </Routes>
           </div>
+          <Footer />
+          {/* <footer><p>• Done By Rohith Rudrapati •</p></footer> */}
         </Router>
 
       </NoteState>

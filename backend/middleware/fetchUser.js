@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken'); // Imports the jsonwebtoken library
+import jwt from 'jsonwebtoken'; // Imports the jsonwebtoken library
 const Jwt_Secret = "Doneby@RohithRudrapati"; // Defines the secret key for JWT
 
 
@@ -20,4 +20,5 @@ const fetchUser = (req, res, next) => { // Defines a middleware function named f
 }
 
 
-module.exports = fetchUser; // Exports the fetchUser middleware for use in other parts of the application
+// module.exports = fetchUser; // Exports the fetchUser middleware for use in other parts of the application
+export default fetchUser;

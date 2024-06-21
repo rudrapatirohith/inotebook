@@ -1,11 +1,39 @@
-const express = require('express'); //imports the express.js library
-const router = express.Router(); //creating a object router to define routes
-const User = require('../models/User.js'); //importing user.js file
-const { body, validationResult } = require('express-validator'); //importing validation functions from express-validator
-const bcrypt = require('bcryptjs'); //importing bcrypt lib for password hashing
-const jwt=require('jsonwebtoken');
-const Jwt_Secret="Doneby@RohithRudrapati";
-const fetchUser=require('../middleware/fetchUser.js');
+import express from 'express'; // import the express.js library
+const router = express.Router(); // create an object router to define routes
+import User from '../models/User.js'; // import User model from user.js file
+import { body, validationResult } from 'express-validator'; // import validation functions from express-validator
+import bcrypt from 'bcryptjs'; // import bcrypt library for password hashing
+import jwt from 'jsonwebtoken'; // import jsonwebtoken library
+const Jwt_Secret = "Doneby@RohithRudrapati"; // define your JWT secret
+import fetchUser from '../middleware/fetchUser.js'; // import fetchUser middleware
+
+// Your route handlers using imported modules
+// Example:
+router.post('/register', [
+  body('email', 'Enter a valid email').isEmail(),
+  body('name', 'Enter a valid name').isLength({ min: 3 }),
+  body('password', 'Password must be at least 5 characters').isLength({ min: 5 }),
+], async (req, res) => {
+  // Handle registration logic using imported modules
+});
+
+// router.post('/login', async (req, res) => {
+//   // Handle login logic using imported modules
+// });
+
+// Example of using imported User model
+router.get('/users', fetchUser, async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// export default router;
+
 
 
 //ROUTE 1 : create a User using: POST "/api/auth/createuser". No login Required
@@ -31,7 +59,7 @@ router.post('/createuser', [
             return res.status(400).json({ success,error: "Sorry a user with this email already exists" }) //if exists gives this error
         }
         const salt = await bcrypt.genSalt(10); //generates a salt for the password hashing
-        securedPass = await bcrypt.hash(req.body.password, salt); //hashes the password with the salt
+        const securedPass = await bcrypt.hash(req.body.password, salt); //hashes the password with the salt
 
         // create a new user with the provided name, hashed password, and email.
         user = await User.create({
@@ -87,7 +115,8 @@ router.post('/login', [
     // if matches we prepare data for jwt token generation
         const data= {
             user:{
-                id: user.id
+                id: user.id,
+                name: user.name
             }
         }
         const authenticationToken= jwt.sign(data,Jwt_Secret); 
@@ -109,7 +138,7 @@ router.post('/login', [
 router.post('/getuser',fetchUser,async(req,res)=>{
 
 try {
-    userId= req.user.id; //Assigning the ID of the authenticated user to the variable userId. This is obtained from the req.user.id property, which is populated by the fetchUser middleware.
+    const userId= req.user.id; //Assigning the ID of the authenticated user to the variable userId. This is obtained from the req.user.id property, which is populated by the fetchUser middleware.
     const user= await User.findById(userId).select("-password") //Fetches the user from the database by ID, excluding the password field from the result.
     res.send(user) // sending the user data back to the client 
 
@@ -118,4 +147,5 @@ try {
         res.status(500).send("There is some Internal Server Issue"); // we will get to see this in response like in thunderclient response
 }
 });
-module.exports = router //exports the router so that we can use it in other parts of the application
+// module.exports = router //exports the router so that we can use it in other parts of the application
+export default router;

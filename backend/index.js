@@ -1,21 +1,33 @@
-const connectToMongo= require('./db'); //calling db.js file
-const express= require('express') //intializing express librbary
-var cors=require('cors')
-connectToMongo(); //calling the db.js
+import path from 'path';
+import { fileURLToPath } from 'url';
+import connectToMongo from './db.js'; // Ensure this is the correct path
+import express from 'express';
+import cors from 'cors';
 
+const _filename = fileURLToPath(import.meta.url);
+const _dirname = path.dirname(_filename);
 
-const app=express() //creating a variable to use exoress
-const port=5000 //giving a port number to work on
+connectToMongo(); // calling the db.js
 
-app.use(cors())
-//to use req.body we use this middle ware
-app.use(express.json())
+const app = express(); // creating a variable to use express
+const port = 5000; // giving a port number to work on
 
-//Available Routes
-app.use('/api/auth',require('./routes/auth'))
-app.use('/api/notes', require('./routes/notes'))
+app.use(cors());
+// to use req.body we use this middleware
+app.use(express.json());
 
-//start a server that listens on a specific port, and then logs a message indicating the server is ready to accept connections on that port.
-app.listen(port,()=>{
-    console.log(`iNotebook Backend Started Listening on port ${port}`)
-})
+// Available Routes
+import authRoutes from './routes/auth.js';
+import notesRoutes from './routes/notes.js';
+app.use('/api/auth', authRoutes);
+app.use('/api/notes', notesRoutes);
+
+app.use(express.static(path.join(_dirname, '../build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(_dirname, '../build/index.html'));
+});
+
+// start a server that listens on a specific port, and then logs a message indicating the server is ready to accept connections on that port.
+app.listen(port, () => {
+  console.log(`iNotebook Backend Started Listening on port ${port}`);
+});

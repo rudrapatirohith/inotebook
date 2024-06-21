@@ -1,9 +1,9 @@
-const express = require('express'); //imports express
-const router = express.Router(); //creates a new router object in Express.js, allowing for modular route handling by acting as a mini-app
-const fetchUser = require('../middleware/fetchUser'); // Imports the fetchUser middleware
-const Note = require('../models/Note'); // Imports the Note model
-const { body, validationResult } = require('express-validator'); //importing validation functions from express-validator
+import express from 'express'; // Import express
+const router = express.Router(); // Creates a new router object in Express.js
 
+import fetchUser from '../middleware/fetchUser.js'; // Imports the fetchUser middleware
+import Note from '../models/Note.js'; // Imports the Note model
+import { body, validationResult } from 'express-validator'; // Import validation functions from express-validator
 
 // ROUTE 1: Get All the Notes using: GET "/api/notes/fetchnotes" that uses FetchUser middle ware for authentication . Login required
 router.get('/fetchallnotes', fetchUser, async (req, res) => {
@@ -97,4 +97,5 @@ router.delete('/deletenote/:id', fetchUser, async (req, res) => {
 
 })
 
-module.exports = router
+// module.exports = router
+export default router;

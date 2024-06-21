@@ -8,7 +8,7 @@ function Notes(props) {
   const context = useContext(NoteContext);
   const { notes, getAllNotes, editNote } = context;
   let navigate = useNavigate();
-
+console.log(context);
   const {showAlert}=props;
   useEffect(() => {
     if(localStorage.getItem('token')){

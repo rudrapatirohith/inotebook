@@ -7,25 +7,45 @@ const Login = (props) => {
     const navigate = useNavigate();
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await fetch("http://localhost:5000/api/auth/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: credentials.email, password: credentials.password })
-        });
-        const json = await response.json()
-        console.log(json)
-        if (json.success) {
-            localStorage.setItem('token', json.authenticationToken);
-            props.showAlert("Logged in Successfully","success")
-            navigate("/");
 
+        console.log("Form submitted");
+        try {
+            
+            const response = await fetch("http://localhost:5000/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: credentials.email, password: credentials.password })
+            });
+
+            console.log("Response received");
+
+            if (!response.ok) {
+                console.error("HTTP error:", response.status);
+                props.showAlert("Invalid Credentials", "danger");
+                return;
+            }
+
+            const json = await response.json()
+            
+            console.log('API response:', json);
+            if (json.success) {
+                localStorage.setItem('token', json.authenticationToken);
+                props.showAlert("Logged in Successfully","success")
+                navigate("/");
+    
+            }
+            else {
+                props.showAlert("Invalid Credentials","danger")
+                console.log("invalid");
+            }
         }
-        else {
-            props.showAlert("Invalid Credentials","danger")
+        catch (error) {
+            console.error("Error during login:", error);
+            props.showAlert("Something went wrong", "danger");
         }
-    }
+    };
     const onChange = (event) => {
         setCredentials({ ...credentials, [event.target.name]: event.target.value })
     }

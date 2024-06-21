@@ -11,6 +11,7 @@ import {
   Routes
 } from 'react-router-dom';
 import NoteState from './context/notes/NoteState';
+import UserState from './context/notes/UserState';
 import Alert from './components/Alert';
 import { useState } from 'react';
 import Footer from './components/Footer';
@@ -29,6 +30,7 @@ function App() {
   };
   return (
     <>
+    <UserState>
       <NoteState showAlert={showAlert}>
         <Router>
           <Navbar />
@@ -46,6 +48,7 @@ function App() {
         </Router>
 
       </NoteState>
+      </UserState>
     </>
   );
 }

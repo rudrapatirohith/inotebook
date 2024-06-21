@@ -1,7 +1,7 @@
 
-const mongoose=require('mongoose'); //importing mongo 
-const mongoURI= "mongodb://localhost:27017/inotebook"; //connecting mongo db 
-
+import mongoose from 'mongoose'; //importing mongo 
+const mongoURI= "mongodb+srv://rohithrudrapati:rohithrudrapati@inotebook.byqgit3.mongodb.net/inotebook?retryWrites=true&w=majority&appName=Inotebook"; //connecting mongo db 
+// const mongoURI = "mongodb://localhost:27017"
 
 //waits till it connect and print connected if not prints the error
 const connectToMongo = async () => {
@@ -14,4 +14,5 @@ const connectToMongo = async () => {
     }
 }
 
-module.exports = connectToMongo;//exports the function so that we can you in diff files
+// module.exports = connectToMongo;//exports the function so that we can you in diff files
+export default connectToMongo;

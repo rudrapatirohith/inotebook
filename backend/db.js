@@ -1,6 +1,6 @@
 
 const mongoose=require('mongoose'); //importing mongo 
-const mongoURI= "mongodb://localhost:27017/inotebook"; //connecting mongo db 
+const mongoURI= "mongodb+srv://rohithrudrapati:rohithrudrapati@inotebook.byqgit3.mongodb.net/inotebook?retryWrites=true&w=majority&appName=Inotebook"; //connecting mongo db 
 
 
 //waits till it connect and print connected if not prints the error
